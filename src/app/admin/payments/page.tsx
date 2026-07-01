@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ShieldAlert, IndianRupee, Clock, CheckCircle } from "lucide-react";
@@ -11,7 +11,7 @@ export const runtime = 'edge';
 export default async function AdminPaymentsDashboard() {
   // 1. Security Check: Only zenexelectro@gmail.com can view this page
   // സുരക്ഷാ പരിശോധന: അഡ്മിന് മാത്രമേ ഈ പേജ് കാണാൻ സാധിക്കൂ
-  const session = await getServerSession();
+  const session = await auth();
   if (!session || session.user?.email !== "zenexelectro@gmail.com") {
     redirect("/api/auth/signin");
   }
