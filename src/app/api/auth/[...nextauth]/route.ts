@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
+export const runtime = 'edge';
+
 // NextAuth Configuration for Admin Login / അഡ്മിൻ ലോഗിൻ ചെയ്യാനുള്ള സംവിധാനം
 const handler = NextAuth({
   providers: [

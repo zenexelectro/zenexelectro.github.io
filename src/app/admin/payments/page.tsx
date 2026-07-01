@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ShieldAlert, IndianRupee, Clock, CheckCircle } from "lucide-react";
 
 export const dynamic = "force-dynamic"; // Ensure fresh data on every load
+export const runtime = 'edge';
 
 // Admin Payment Verification Dashboard (Uneditable Log)
 // മാറ്റങ്ങൾ വരുത്താൻ സാധിക്കാത്ത അഡ്മിൻ പേയ്മെന്റ് പരിശോധനാ പാനൽ

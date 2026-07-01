@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const runtime = 'edge';
+
 // Serverless API for Direct UPI Payment Verification
 // നേരിട്ടുള്ള യു.പി.ഐ പേയ്മെന്റ് പരിശോധിക്കുന്നതിനുള്ള സർവർലെസ്സ് API
 export async function POST(request: Request) {
