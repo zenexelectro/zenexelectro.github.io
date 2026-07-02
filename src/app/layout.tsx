@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://zenexelectro.pages.dev'),
   title: "Zenex Electronics & Security Systems",
   description: "Premium enterprise-level security, electronics, and smart automation installations.",
   openGraph: {
