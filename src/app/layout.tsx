@@ -9,6 +9,27 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Zenex Electronics & Security Systems",
   description: "Premium enterprise-level security, electronics, and smart automation installations.",
+  openGraph: {
+    title: "Zenex Electronics & Security Systems",
+    description: "Premium enterprise-level security, electronics, and smart automation installations.",
+    url: 'https://zenexelectro.pages.dev',
+    siteName: 'Zenex Systems',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 1200,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Zenex Electronics & Security Systems',
+    description: 'Premium enterprise-level security, electronics, and smart automation installations.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default function RootLayout({
