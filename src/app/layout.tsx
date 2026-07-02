@@ -23,13 +23,13 @@ export default function RootLayout({
           {/* Header */}
           <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 max-w-screen-2xl items-center px-8">
-              <div className="mr-4 hidden md:flex">
+              <div className="mr-4 flex w-full justify-between items-center md:justify-start">
                 <a className="mr-6 flex items-center space-x-2" href="/">
-                  <span className="hidden font-bold sm:inline-block text-xl tracking-tight">
+                  <span className="font-bold inline-block text-xl tracking-tight">
                     ZENEX<span className="text-muted-foreground font-light">SYSTEMS</span>
                   </span>
                 </a>
-                <nav className="flex items-center gap-6 text-sm">
+                <nav className="flex items-center gap-4 md:gap-6 text-xs md:text-sm">
                   <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#services">Services</a>
                   <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#showcase">Showcase</a>
                   <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#contact">Contact</a>

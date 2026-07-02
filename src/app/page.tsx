@@ -34,18 +34,18 @@ export default function Home() {
           transition={{ duration: 0.7 }}
           className="z-10 max-w-4xl space-y-6"
         >
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-balance">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tighter text-balance leading-tight">
             Next-Gen Security & <br />
             <span className="text-muted-foreground">Smart Automation.</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground text-balance max-w-2xl mx-auto">
             Enterprise-grade installations and hyper-modern smart systems designed for the future of security.
           </p>
-          <div className="flex justify-center gap-4 pt-8">
-            <Button size="lg" className="rounded-full px-8 h-14 text-lg">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8 px-4">
+            <Button size="lg" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto">
               Explore Solutions <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg bg-transparent border-primary/20 hover:bg-primary/5">
+            <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto bg-transparent border-primary/20 hover:bg-primary/5">
               Contact Sales
             </Button>
           </div>
@@ -58,7 +58,7 @@ export default function Home() {
       {/* Services Grid Section */}
       <section id="services" className="w-full max-w-screen-2xl px-8 py-24">
         <div className="flex flex-col items-start mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Our Expertise</h2>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Our Expertise</h2>
           <p className="text-muted-foreground mt-4 text-lg">Precision-engineered systems for uncompromising safety.</p>
         </div>
         
@@ -92,16 +92,16 @@ export default function Home() {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1, duration: 0.5 }}
-        className="fixed bottom-8 right-8 z-50 flex flex-col gap-3"
+        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col gap-3"
       >
-        <Button size="icon" className="w-14 h-14 rounded-full bg-green-600 hover:bg-green-700 shadow-lg shadow-green-900/20">
-          <MessageCircle className="w-6 h-6 text-white" />
+        <Button size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-600 hover:bg-green-700 shadow-lg shadow-green-900/20">
+          <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
         </Button>
-        <Button size="icon" className="w-14 h-14 rounded-full bg-pink-600 hover:bg-pink-700 shadow-lg shadow-pink-900/20">
-          <Camera className="w-6 h-6 text-white" />
+        <Button size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pink-600 hover:bg-pink-700 shadow-lg shadow-pink-900/20">
+          <Camera className="w-5 h-5 md:w-6 md:h-6 text-white" />
         </Button>
-        <Button size="icon" className="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-900/20">
-          <Phone className="w-6 h-6 text-white" />
+        <Button size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-900/20">
+          <Phone className="w-5 h-5 md:w-6 md:h-6 text-white" />
         </Button>
       </motion.div>
     </div>
