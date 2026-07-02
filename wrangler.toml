@@ -1,0 +1,10 @@
+name = "zenex-enterprise-edge"
+pages_build_output_dir = "out"
+compatibility_date = "2026-07-02"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+
+[vars]
+ENVIRONMENT = "production"
