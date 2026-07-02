@@ -14,13 +14,7 @@ export const metadata: Metadata = {
     description: "Premium enterprise-level security, electronics, and smart automation installations.",
     url: 'https://zenexelectro.pages.dev',
     siteName: 'Zenex Systems',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 1200,
-      },
-    ],
+    images: ['/ZenexLogo.jpg'],
     locale: 'en_US',
     type: 'website',
   },
@@ -28,7 +22,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Zenex Electronics & Security Systems',
     description: 'Premium enterprise-level security, electronics, and smart automation installations.',
-    images: ['/og-image.jpg'],
+    images: ['/ZenexLogo.jpg'],
   },
 };
 
