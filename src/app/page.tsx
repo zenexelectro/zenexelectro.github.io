@@ -97,11 +97,11 @@ export default function Home() {
         <Button size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-green-600 hover:bg-green-700 shadow-lg shadow-green-900/20">
           <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
         </Button>
-        <a href="https://instagram.com/zenexelectro" target="_blank" rel="noopener noreferrer">
-          <Button size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pink-600 hover:bg-pink-700 shadow-lg shadow-pink-900/20">
+        <Button asChild size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pink-600 hover:bg-pink-700 shadow-lg shadow-pink-900/20">
+          <a href="https://instagram.com/zenexelectro" target="_blank" rel="noopener noreferrer">
             <Instagram className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </Button>
-        </a>
+          </a>
+        </Button>
         <Button size="icon" className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-900/20">
           <Phone className="w-5 h-5 md:w-6 md:h-6 text-white" />
         </Button>
