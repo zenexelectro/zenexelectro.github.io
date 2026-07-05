@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, Phone } from "lucide-react";
-import { useState } from "react";
 
 // Custom WhatsApp Vector Icon
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -39,80 +38,51 @@ const CONTACT_ACTIONS = [
 ];
 
 export function FloatingActionButtons() {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-
   return (
-    <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 flex flex-col gap-4 items-end">
+    <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] flex flex-col gap-4 items-end">
       {CONTACT_ACTIONS.map((action, index) => (
         <motion.div
           key={action.id}
           initial={{ opacity: 0, y: 30, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+          animate={{ opacity: 1, y: [0, -6, 0], scale: 1 }}
           transition={{ 
-            delay: 1 + index * 0.15, 
-            duration: 0.6,
-            type: "spring",
-            stiffness: 200,
-            damping: 20 
+            y: { repeat: Infinity, duration: 3 + index * 0.4, ease: "easeInOut" },
+            opacity: { delay: 1 + index * 0.15, duration: 0.6 },
+            scale: { delay: 1 + index * 0.15, duration: 0.6, type: "spring" }
           }}
           className="relative flex items-center justify-end"
-          onMouseEnter={() => setHoveredId(action.id)}
-          onMouseLeave={() => setHoveredId(null)}
-          onClick={() => setHoveredId(action.id)}
         >
-          {/* Tooltip with Glassmorphism & Framer Motion */}
-          <AnimatePresence>
-            {hoveredId === action.id && (
-              <motion.div 
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={{ duration: 0.2 }}
-                className="absolute right-full mr-4 px-4 py-2 rounded-xl bg-slate-900/90 dark:bg-white/10 backdrop-blur-md border border-slate-700/50 dark:border-white/20 text-white font-medium text-sm whitespace-nowrap shadow-xl pointer-events-none"
-              >
-                {action.label}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Continuous Floating Animation Wrapper */}
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ 
-              repeat: Infinity, 
-              duration: 3 + index * 0.4, // Staggered floating phases
-              ease: "easeInOut" 
+          {/* Action Button - 100% CSS Hover Logic for Tooltips */}
+          <a
+            href={action.href}
+            target={action.id === "whatsapp" ? "_blank" : undefined}
+            rel={action.id === "whatsapp" ? "noopener noreferrer" : undefined}
+            className={`group relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full ${action.bgClass} text-white shadow-lg transition-transform duration-300 hover:scale-110 active:scale-95 hover:shadow-2xl outline-none`}
+            style={{
+              boxShadow: `0 10px 25px -5px ${action.glowColor}, 0 8px 10px -6px ${action.glowColor}`
             }}
+            aria-label={action.label}
           >
-            {/* Action Button */}
-            <motion.a
-              href={action.href}
-              target={action.id === "whatsapp" ? "_blank" : undefined}
-              rel={action.id === "whatsapp" ? "noopener noreferrer" : undefined}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className={`relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full ${action.bgClass} text-white shadow-lg transition-all duration-300 overflow-hidden hover:shadow-2xl`}
+            {/* Tooltip (Inside the A tag, so it always triggers on hover) */}
+            <span className="absolute right-[calc(100%+16px)] px-4 py-2 rounded-xl bg-slate-900/95 dark:bg-white/10 backdrop-blur-md border border-slate-700/50 dark:border-white/20 text-white font-medium text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-xl pointer-events-none">
+              {action.label}
+            </span>
+
+            {/* Pulse Glow Effect inside button on hover */}
+            <span 
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300 rounded-full pointer-events-none"
               style={{
-                boxShadow: `0 10px 25px -5px ${action.glowColor}, 0 8px 10px -6px ${action.glowColor}`
+                background: `radial-gradient(circle at center, white 0%, transparent 80%)`,
+                mixBlendMode: "overlay"
               }}
-              aria-label={action.label}
-            >
-              {/* Pulse Glow Effect inside button on hover */}
-              <div 
-                className={`absolute inset-0 transition-opacity duration-300 ${hoveredId === action.id ? "opacity-100 animate-pulse" : "opacity-0"}`}
-                style={{
-                  background: `radial-gradient(circle at center, white 0%, transparent 80%)`,
-                  mixBlendMode: "overlay"
-                }}
-              />
-              
-              {/* Icon */}
-              <action.icon className="w-6 h-6 md:w-7 md:h-7 relative z-10 drop-shadow-md" />
-              
-              {/* Glass reflection (Top Half) */}
-              <div className="absolute top-0 left-0 right-0 bottom-1/2 bg-gradient-to-b from-white/30 to-transparent rounded-t-full pointer-events-none" />
-            </motion.a>
-          </motion.div>
+            />
+            
+            {/* Icon */}
+            <action.icon className="w-6 h-6 md:w-7 md:h-7 relative z-10 drop-shadow-md pointer-events-none" />
+            
+            {/* Glass reflection (Top Half) */}
+            <span className="absolute top-0 left-0 right-0 bottom-1/2 bg-gradient-to-b from-white/30 to-transparent rounded-t-full pointer-events-none" />
+          </a>
         </motion.div>
       ))}
     </div>
