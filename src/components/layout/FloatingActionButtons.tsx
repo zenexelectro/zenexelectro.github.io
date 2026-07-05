@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Instagram } from "lucide-react";
 
 // Custom WhatsApp Vector Icon
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -34,6 +34,14 @@ const CONTACT_ACTIONS = [
     icon: Phone,
     bgClass: "bg-gradient-to-tr from-[#0052D4] via-[#4364F7] to-[#6FB1FC]",
     glowColor: "rgba(67,100,247,0.6)",
+  },
+  {
+    id: "instagram",
+    label: "Follow on Instagram",
+    href: "https://instagram.com/zenexelectro",
+    icon: Instagram,
+    bgClass: "bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]",
+    glowColor: "rgba(238,42,123,0.6)",
   }
 ];
 
