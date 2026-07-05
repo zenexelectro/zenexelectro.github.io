@@ -64,7 +64,7 @@ export function FloatingActionButtons() {
             aria-label={action.label}
           >
             {/* Tooltip (Inside the A tag, so it always triggers on hover) */}
-            <span className="absolute right-[calc(100%+16px)] px-4 py-2 rounded-xl bg-slate-900/95 dark:bg-white/10 backdrop-blur-md border border-slate-700/50 dark:border-white/20 text-white font-medium text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-xl pointer-events-none">
+            <span className="absolute right-[calc(100%+16px)] px-4 py-2 rounded-lg bg-white text-black font-bold text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl border border-gray-200 pointer-events-none">
               {action.label}
             </span>
 
