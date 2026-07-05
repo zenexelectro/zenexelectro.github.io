@@ -56,8 +56,9 @@ export function FloatingActionButtons() {
             damping: 20 
           }}
           className="relative flex items-center justify-end"
-          onHoverStart={() => setHoveredId(action.id)}
-          onHoverEnd={() => setHoveredId(null)}
+          onMouseEnter={() => setHoveredId(action.id)}
+          onMouseLeave={() => setHoveredId(null)}
+          onClick={() => setHoveredId(action.id)}
         >
           {/* Tooltip with Glassmorphism & Framer Motion */}
           <AnimatePresence>
