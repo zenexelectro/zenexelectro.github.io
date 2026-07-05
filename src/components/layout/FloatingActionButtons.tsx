@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone } from "lucide-react";
+import { useState } from "react";
 
 // Custom WhatsApp Vector Icon
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -38,8 +39,10 @@ const CONTACT_ACTIONS = [
 ];
 
 export function FloatingActionButtons() {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
   return (
-    <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 flex flex-col gap-4">
+    <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 flex flex-col gap-4 items-end">
       {CONTACT_ACTIONS.map((action, index) => (
         <motion.div
           key={action.id}
@@ -52,12 +55,24 @@ export function FloatingActionButtons() {
             stiffness: 200,
             damping: 20 
           }}
-          className="relative group flex items-center justify-end"
+          className="relative flex items-center justify-end"
+          onHoverStart={() => setHoveredId(action.id)}
+          onHoverEnd={() => setHoveredId(null)}
         >
-          {/* Tooltip with Glassmorphism */}
-          <div className="absolute right-full mr-4 px-4 py-2 rounded-xl bg-slate-900/90 dark:bg-white/10 backdrop-blur-md border border-slate-700/50 dark:border-white/20 text-white font-medium text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300 shadow-xl pointer-events-none">
-            {action.label}
-          </div>
+          {/* Tooltip with Glassmorphism & Framer Motion */}
+          <AnimatePresence>
+            {hoveredId === action.id && (
+              <motion.div 
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.2 }}
+                className="absolute right-full mr-4 px-4 py-2 rounded-xl bg-slate-900/90 dark:bg-white/10 backdrop-blur-md border border-slate-700/50 dark:border-white/20 text-white font-medium text-sm whitespace-nowrap shadow-xl pointer-events-none"
+              >
+                {action.label}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Continuous Floating Animation Wrapper */}
           <motion.div
@@ -75,7 +90,7 @@ export function FloatingActionButtons() {
               rel={action.id === "whatsapp" ? "noopener noreferrer" : undefined}
               whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className={`relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full ${action.bgClass} text-white shadow-lg transition-all duration-300 overflow-hidden group-hover:shadow-2xl`}
+              className={`relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full ${action.bgClass} text-white shadow-lg transition-all duration-300 overflow-hidden hover:shadow-2xl`}
               style={{
                 boxShadow: `0 10px 25px -5px ${action.glowColor}, 0 8px 10px -6px ${action.glowColor}`
               }}
@@ -83,7 +98,7 @@ export function FloatingActionButtons() {
             >
               {/* Pulse Glow Effect inside button on hover */}
               <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300"
+                className={`absolute inset-0 transition-opacity duration-300 ${hoveredId === action.id ? "opacity-100 animate-pulse" : "opacity-0"}`}
                 style={{
                   background: `radial-gradient(circle at center, white 0%, transparent 80%)`,
                   mixBlendMode: "overlay"
