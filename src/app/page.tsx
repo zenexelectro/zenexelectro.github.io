@@ -1,7 +1,6 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { CTASection } from "@/components/home/CTASection";
-import { FloatingActionButtons } from "@/components/layout/FloatingActionButtons";
 
 export default function Home() {
   return (
@@ -9,7 +8,6 @@ export default function Home() {
       <HeroSection />
       <ServicesSection />
       <CTASection />
-      <FloatingActionButtons />
     </div>
   );
 }
