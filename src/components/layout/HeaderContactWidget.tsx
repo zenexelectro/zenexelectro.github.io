@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Mail, Phone, MapPin, Clock } from "lucide-react";
 
@@ -18,8 +18,19 @@ const InstagramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export function FloatingContactWidget() {
+export function HeaderContactWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const contactLinks = [
     {
@@ -52,15 +63,25 @@ export function FloatingContactWidget() {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col items-end">
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+      >
+        Get in Touch
+        <MessageCircle className="w-4 h-4" />
+      </button>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 250, damping: 25 }}
-            className="mb-4 w-[340px] md:w-[380px] overflow-hidden rounded-[24px] border border-border/60 bg-background/80 backdrop-blur-3xl shadow-2xl origin-bottom-right"
+            className="absolute right-0 top-full mt-3 w-[340px] md:w-[380px] overflow-hidden rounded-[24px] border border-border/60 bg-background/80 backdrop-blur-3xl shadow-2xl origin-top-right z-50"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border/40 p-5 bg-gradient-to-br from-foreground/5 to-transparent">
@@ -87,6 +108,7 @@ export function FloatingContactWidget() {
                     target={link.id === "whatsapp" ? "_blank" : undefined}
                     rel={link.id === "whatsapp" ? "noopener noreferrer" : undefined}
                     className="group flex items-center gap-4 rounded-2xl border border-border/40 bg-card/50 p-3 transition-all duration-300 hover:bg-muted/50 hover:border-border/80 hover:shadow-sm active:scale-[0.98]"
+                    onClick={() => setIsOpen(false)}
                   >
                     <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${link.colorClass} ${link.hoverClass}`}>
                       <link.icon className="h-5 w-5" />
@@ -135,42 +157,6 @@ export function FloatingContactWidget() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Trigger Button */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-shadow hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        aria-label="Toggle contact menu"
-      >
-        {/* Ambient glow */}
-        <div className="absolute inset-0 -z-10 rounded-full bg-primary/40 blur-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        
-        <AnimatePresence mode="wait">
-          {isOpen ? (
-            <motion.div
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <X className="h-6 w-6 md:h-7 md:w-7" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="message"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <MessageCircle className="h-6 w-6 md:h-7 md:w-7 fill-current" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.button>
     </div>
   );
 }

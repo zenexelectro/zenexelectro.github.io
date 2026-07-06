@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ContactDropdown } from "./ContactDropdown";
+import { HeaderContactWidget } from "./HeaderContactWidget";
 
 export function Header() {
   return (
@@ -16,7 +16,7 @@ export function Header() {
               <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="/#services">Services</a>
               <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="/#showcase">Showcase</a>
             </nav>
-            <ContactDropdown />
+            <HeaderContactWidget />
           </div>
         </div>
       </div>
