@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { MessageCircle, X, Mail, Phone, MapPin, Clock } from "lucide-react";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -59,64 +59,85 @@ export function HeaderContactWidget() {
     }
   ];
 
+  const containerVars: Variants = {
+    hidden: { opacity: 0, y: -10, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 400, damping: 30, staggerChildren: 0.05, delayChildren: 0.02 }
+    },
+    exit: { opacity: 0, y: -10, scale: 0.95, transition: { duration: 0.15 } }
+  };
+
+  const itemVars: Variants = {
+    hidden: { opacity: 0, y: 8, filter: "blur(4px)" },
+    visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95"
+        className="group relative flex items-center gap-2.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+        </span>
         Connect
-        <MessageCircle className="w-4 h-4" />
+        <MessageCircle className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 250, damping: 25 }}
-            className="absolute right-0 top-full mt-3 w-[260px] md:w-[280px] overflow-hidden rounded-[20px] border border-border/60 bg-background/80 backdrop-blur-3xl shadow-2xl origin-top-right z-50"
+            variants={containerVars}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="absolute right-0 top-full mt-3 w-[260px] md:w-[280px] overflow-hidden rounded-[20px] border border-border/60 bg-background/80 backdrop-blur-3xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.1)] origin-top-right z-50"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-border/40 px-4 py-3 bg-gradient-to-br from-foreground/5 to-transparent">
+            <motion.div variants={itemVars} className="flex items-center justify-between border-b border-border/40 px-4 py-3 bg-gradient-to-br from-foreground/5 to-transparent">
               <div className="flex flex-col">
                 <h3 className="text-[14px] font-semibold text-foreground tracking-tight">Let's Connect</h3>
                 <p className="text-[10px] text-muted-foreground">We typically reply in minutes.</p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/5 text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus:outline-none"
+                className="group flex h-7 w-7 items-center justify-center rounded-full bg-foreground/5 text-muted-foreground transition-all hover:bg-foreground/10 hover:text-foreground focus:outline-none active:scale-95"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3.5 w-3.5 transition-transform group-hover:rotate-90" />
               </button>
-            </div>
+            </motion.div>
 
             {/* Content */}
             <div className="p-3.5 flex flex-col gap-3.5">
               {/* Quick Actions Grid */}
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-1 gap-1.5">
                 {contactLinks.map((link) => (
-                  <a
+                  <motion.a
+                    variants={itemVars}
                     key={link.id}
                     href={link.href}
                     target={link.id === "whatsapp" ? "_blank" : undefined}
                     rel={link.id === "whatsapp" ? "noopener noreferrer" : undefined}
-                    className="group flex items-center gap-3 rounded-[14px] border border-border/40 bg-card/50 p-2 transition-all duration-300 hover:bg-muted/50 hover:border-border/80 hover:shadow-sm active:scale-[0.98]"
+                    className="group flex items-center gap-3 rounded-[14px] border border-transparent bg-transparent p-2 transition-all duration-300 hover:bg-muted/50 hover:border-border/40 hover:shadow-sm active:scale-[0.98]"
                     onClick={() => setIsOpen(false)}
                   >
                     <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${link.colorClass} ${link.hoverClass}`}>
                       <link.icon className="h-4 w-4" />
                     </div>
-                    <span className="text-[13px] font-medium text-foreground">{link.label}</span>
-                  </a>
+                    <span className="text-[13px] font-medium text-foreground transition-colors group-hover:text-primary">{link.label}</span>
+                  </motion.a>
                 ))}
               </div>
 
               {/* Info Section */}
-              <div className="flex flex-col gap-2.5 rounded-[14px] border border-border/40 bg-card/30 p-3">
+              <motion.div variants={itemVars} className="flex flex-col gap-2.5 rounded-[14px] border border-border/40 bg-card/30 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
                 <div className="flex items-center gap-2.5">
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foreground/5">
                     <MapPin className="h-3 w-3 text-foreground/70" />
@@ -130,18 +151,18 @@ export function HeaderContactWidget() {
                   </div>
                   <span className="text-[11px] font-medium text-foreground">Mon-Sat: 9 AM - 6 PM</span>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between border-t border-border/40 bg-muted/20 px-4 py-2.5">
+            <motion.div variants={itemVars} className="flex items-center justify-between border-t border-border/40 bg-muted/20 px-4 py-2.5">
               <span className="text-[10px] font-medium text-muted-foreground">Follow our social channels</span>
               <div className="flex items-center gap-2">
-                <a href="https://instagram.com/zenexelectro" target="_blank" rel="noopener noreferrer" className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground/5 text-muted-foreground transition-all duration-300 hover:bg-[#ee2a7b] hover:text-white">
+                <a href="https://instagram.com/zenexelectro" target="_blank" rel="noopener noreferrer" className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground/5 text-muted-foreground transition-all duration-300 hover:bg-[#ee2a7b] hover:text-white active:scale-95">
                   <InstagramIcon className="h-3 w-3" />
                 </a>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
