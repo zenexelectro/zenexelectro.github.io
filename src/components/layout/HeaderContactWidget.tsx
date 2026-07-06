@@ -70,7 +70,7 @@ export function HeaderContactWidget() {
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        Get in Touch
+        Connect
         <MessageCircle className="w-4 h-4" />
       </button>
 
@@ -86,7 +86,7 @@ export function HeaderContactWidget() {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border/40 p-5 bg-gradient-to-br from-foreground/5 to-transparent">
               <div className="flex flex-col">
-                <h3 className="text-lg font-semibold text-foreground tracking-tight">Get in touch</h3>
+                <h3 className="text-lg font-semibold text-foreground tracking-tight">Let's Connect</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">We typically reply within a few minutes.</p>
               </div>
               <button
