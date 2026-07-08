@@ -13,7 +13,7 @@ export function HeroSection() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="z-10 max-w-4xl space-y-6"
+        className="relative z-10 max-w-4xl space-y-6"
       >
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tighter text-balance leading-tight">
           Next-Gen Security & <br />
