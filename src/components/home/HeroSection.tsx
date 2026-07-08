@@ -29,7 +29,7 @@ export function HeroSection() {
             </a>
           </Button>
           <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto bg-transparent border-primary/20 hover:bg-primary/5" asChild>
-            <a href="mailto:zenexelectro@gmail.com">
+            <a href="https://wa.me/917356863575" target="_blank" rel="noopener noreferrer">
               Contact Sales
             </a>
           </Button>
