@@ -2,215 +2,248 @@
 
 import { useEffect, useRef } from "react";
 
-/*
- * Premium Animated Gradient Mesh — inspired by Stripe, Linear, Vercel.
- * No particles. Just smooth, flowing color gradients that morph and blend.
- * Subtle film-grain overlay for depth.
- */
+// === ADVANCED PRO LEVEL: INTERACTIVE 3D CYBER-MESH WAVE ===
+// A flying perspective wireframe terrain with data nodes, color-mapped elevation, and mouse parallax.
 
-interface GradientBlob {
+interface Point3D {
   x: number;
   y: number;
-  baseX: number;
-  baseY: number;
-  size: number;
+  z: number;
+  px: number;
+  py: number;
+  rz: number;
+  scale: number;
   color: string;
-  phaseX: number;
-  phaseY: number;
-  speedX: number;
-  speedY: number;
-  radiusX: number;
-  radiusY: number;
+  isDataNode: boolean;
 }
 
 export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef(0);
-  const mouseRef = useRef({ x: -9999, y: -9999, targetX: -9999, targetY: -9999 });
-  const tRef = useRef(0);
+  const mouseRef = useRef({ targetX: 0, targetY: 350, x: 0, y: 350 });
+  const timeRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: true });
+    const ctx = canvas.getContext("2d", { alpha: false }); // False for better performance, we'll draw a solid background
     if (!ctx) return;
 
     let w = 0, h = 0;
-
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Limit DPR to 1.5 for performance on extremely high-res displays while maintaining crispness
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = canvas.offsetWidth;
       h = canvas.offsetHeight;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.scale(dpr, dpr);
-      // Update blob base positions on resize
-      if (blobs.length > 0) {
-        blobs[0].baseX = w * 0.15; blobs[0].baseY = h * 0.3;
-        blobs[1].baseX = w * 0.7;  blobs[1].baseY = h * 0.2;
-        blobs[2].baseX = w * 0.5;  blobs[2].baseY = h * 0.7;
-        blobs[3].baseX = w * 0.85; blobs[3].baseY = h * 0.6;
-        blobs[4].baseX = w * 0.3;  blobs[4].baseY = h * 0.8;
-      }
     };
-
-    // ═══ GRADIENT MESH BLOBS ═══
-    const blobs: GradientBlob[] = [
-      {
-        x: 0, y: 0, baseX: 0, baseY: 0,
-        size: 350,
-        color: "rgba(220, 20, 60, 0.08)",  // Cherry red
-        phaseX: 0, phaseY: 0.5,
-        speedX: 0.0004, speedY: 0.0003,
-        radiusX: 80, radiusY: 60,
-      },
-      {
-        x: 0, y: 0, baseX: 0, baseY: 0,
-        size: 400,
-        color: "rgba(99, 102, 241, 0.07)",  // Indigo
-        phaseX: 1.2, phaseY: 2.1,
-        speedX: 0.0003, speedY: 0.0005,
-        radiusX: 100, radiusY: 70,
-      },
-      {
-        x: 0, y: 0, baseX: 0, baseY: 0,
-        size: 320,
-        color: "rgba(16, 185, 129, 0.06)",  // Emerald
-        phaseX: 2.5, phaseY: 0.8,
-        speedX: 0.0005, speedY: 0.0004,
-        radiusX: 90, radiusY: 80,
-      },
-      {
-        x: 0, y: 0, baseX: 0, baseY: 0,
-        size: 280,
-        color: "rgba(168, 85, 247, 0.06)",  // Purple
-        phaseX: 3.8, phaseY: 1.5,
-        speedX: 0.0003, speedY: 0.0006,
-        radiusX: 70, radiusY: 90,
-      },
-      {
-        x: 0, y: 0, baseX: 0, baseY: 0,
-        size: 300,
-        color: "rgba(6, 182, 212, 0.05)",   // Cyan
-        phaseX: 5.0, phaseY: 3.2,
-        speedX: 0.0004, speedY: 0.0003,
-        radiusX: 85, radiusY: 65,
-      },
-    ];
-
     resize();
 
-    // ═══ GRAIN TEXTURE (pre-rendered for performance) ═══
-    const grainCanvas = document.createElement("canvas");
-    grainCanvas.width = 256;
-    grainCanvas.height = 256;
-    const grainCtx = grainCanvas.getContext("2d")!;
-    const generateGrain = () => {
-      const imageData = grainCtx.createImageData(256, 256);
-      const data = imageData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        const v = Math.random() * 255;
-        data[i] = v;
-        data[i + 1] = v;
-        data[i + 2] = v;
-        data[i + 3] = 8; // Very subtle
+    // ═══ SETTINGS ═══
+    const cols = 45;
+    const rows = 45;
+    const spacing = 110;
+    const focalLength = 550;
+    
+    // Lerp color helper
+    const lerpColor = (c1: number[], c2: number[], t: number) => [
+      Math.round(c1[0] + (c2[0] - c1[0]) * t),
+      Math.round(c1[1] + (c2[1] - c1[1]) * t),
+      Math.round(c1[2] + (c2[2] - c1[2]) * t),
+    ];
+
+    const getColor = (y: number, alpha: number) => {
+      // Elevation roughly ranges from -180 to 180
+      let t = (y + 180) / 360;
+      t = Math.max(0, Math.min(1, t));
+      
+      const indigo = [99, 102, 241];
+      const emerald = [16, 185, 129];
+      const cherry = [220, 20, 60];
+      
+      let r, g, b;
+      if (t < 0.5) {
+        [r, g, b] = lerpColor(indigo, emerald, t * 2);
+      } else {
+        [r, g, b] = lerpColor(emerald, cherry, (t - 0.5) * 2);
       }
-      grainCtx.putImageData(imageData, 0, 0);
+      return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
     };
-    generateGrain();
+
+    // Terrain generator
+    const getElevation = (x: number, z: number, t: number) => {
+      let y = 0;
+      y += Math.sin(x * 0.003 + t * 1.5) * 80;
+      y += Math.cos(z * 0.002 - t * 0.9) * 110;
+      const d = Math.sqrt(x * x + z * z);
+      y += Math.sin(d * 0.004 - t * 2.5) * 70;
+      return y;
+    };
 
     // ═══ EVENTS ═══
     const onMove = (e: MouseEvent) => {
       const r = canvas.getBoundingClientRect();
-      mouseRef.current.targetX = e.clientX - r.left;
-      mouseRef.current.targetY = e.clientY - r.top;
+      // Calculate mouse influence for camera parallax
+      mouseRef.current.targetX = (e.clientX - r.left - w / 2) * 1.5;
+      mouseRef.current.targetY = 350 + (e.clientY - r.top - h / 2) * 0.8;
     };
     const onLeave = () => {
-      mouseRef.current.targetX = -9999;
-      mouseRef.current.targetY = -9999;
+      mouseRef.current.targetX = 0;
+      mouseRef.current.targetY = 350;
     };
 
     canvas.addEventListener("mousemove", onMove);
     canvas.addEventListener("mouseleave", onLeave);
     window.addEventListener("resize", resize);
 
-    // ═══ RENDER ═══
+    // ═══ RENDER LOOP ═══
     const draw = () => {
-      tRef.current++;
-      const t = tRef.current;
-
-      // Smooth mouse interpolation
+      timeRef.current += 0.015;
+      const t = timeRef.current;
+      
+      // Smooth camera interpolation
       const m = mouseRef.current;
       m.x += (m.targetX - m.x) * 0.05;
       m.y += (m.targetY - m.y) * 0.05;
 
-      ctx.clearRect(0, 0, w, h);
+      const camX = m.x;
+      const camY = m.y;
+      const camZ = -800; // Camera distance from origin
+      const pitch = 0.35; // Look down angle
+      const cosP = Math.cos(pitch);
+      const sinP = Math.sin(pitch);
 
-      // ─── 1. GRADIENT MESH ───
-      ctx.globalCompositeOperation = "screen";
+      // Deep space dark background
+      ctx.fillStyle = "#050505";
+      ctx.fillRect(0, 0, w, h);
 
-      for (const blob of blobs) {
-        // Organic orbit motion
-        blob.x = blob.baseX + Math.sin(t * blob.speedX + blob.phaseX) * blob.radiusX;
-        blob.y = blob.baseY + Math.cos(t * blob.speedY + blob.phaseY) * blob.radiusY;
+      const points: (Point3D | null)[][] = Array.from({ length: cols }, () => new Array(rows).fill(null));
 
-        // Mouse influence — blobs drift toward cursor
-        if (m.x > 0 && m.y > 0) {
-          const dx = m.x - blob.x;
-          const dy = m.y - blob.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 400) {
-            const pull = (400 - dist) / 400 * 15;
-            blob.x += (dx / dist) * pull * 0.02;
-            blob.y += (dy / dist) * pull * 0.02;
+      // 1. Calculate 3D points & project
+      const flySpeed = t * 250;
+      const zOffset = flySpeed % spacing;
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = (i - cols / 2) * spacing;
+          // Grid shifts forward, wrapping around
+          const z = (j - 5) * spacing - zOffset; 
+
+          const y = getElevation(x, z - flySpeed, t);
+
+          // Translate relative to camera
+          const dx = x - camX;
+          const dy = y - camY;
+          const dz = z - camZ;
+
+          // Rotate around X axis (pitch)
+          const rx = dx;
+          const ry = dy * cosP - dz * sinP;
+          const rz = dy * sinP + dz * cosP;
+
+          // Frustum culling (behind camera or too close)
+          if (rz < 50) continue;
+
+          // Project to 2D
+          const scale = focalLength / rz;
+          const px = w / 2 + rx * scale;
+          const py = h / 2 - ry * scale;
+
+          // Distance fade (fade out in the far horizon)
+          const maxDist = 3500;
+          let alpha = 1 - (rz / maxDist);
+          alpha = Math.max(0, Math.min(1, alpha));
+          
+          // Data nodes (flashing energy packets on the grid)
+          // Pseudo-random fast pattern
+          const isDataNode = (i * 27 + j * 19 + Math.floor(t * 15)) % 150 === 0;
+
+          points[i][j] = {
+            x, y, z, px, py, rz, scale,
+            color: getColor(y, alpha * 0.8),
+            isDataNode
+          };
+        }
+      }
+
+      // 2. Draw Wireframe & Nodes
+      // We draw back-to-front by reversing the Z loop (j) for proper visual stacking of nodes
+      for (let j = rows - 1; j >= 0; j--) {
+        for (let i = 0; i < cols; i++) {
+          const p = points[i][j];
+          if (!p) continue;
+
+          // Draw connecting lines
+          ctx.lineWidth = Math.max(0.3, 1.2 * p.scale);
+          
+          // Connect to right
+          if (i < cols - 1) {
+            const right = points[i + 1][j];
+            if (right) {
+              const grad = ctx.createLinearGradient(p.px, p.py, right.px, right.py);
+              grad.addColorStop(0, p.color);
+              grad.addColorStop(1, right.color);
+              ctx.strokeStyle = grad;
+              ctx.beginPath();
+              ctx.moveTo(p.px, p.py);
+              ctx.lineTo(right.px, right.py);
+              ctx.stroke();
+            }
+          }
+
+          // Connect to bottom
+          if (j < rows - 1) {
+            const down = points[i][j + 1];
+            if (down) {
+              const grad = ctx.createLinearGradient(p.px, p.py, down.px, down.py);
+              grad.addColorStop(0, p.color);
+              grad.addColorStop(1, down.color);
+              ctx.strokeStyle = grad;
+              ctx.beginPath();
+              ctx.moveTo(p.px, p.py);
+              ctx.lineTo(down.px, down.py);
+              ctx.stroke();
+            }
+          }
+
+          // Draw intersection node
+          if (p.isDataNode) {
+            // Flashing bright data node
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(p.px, p.py, Math.max(1, 4 * p.scale), 0, Math.PI * 2);
+            ctx.fill();
+
+            // Glow
+            ctx.fillStyle = p.color.replace(/[\d.]+\)$/, "0.5)"); // Higher alpha
+            ctx.beginPath();
+            ctx.arc(p.px, p.py, Math.max(2, 12 * p.scale), 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            // Standard subtle node
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.px, p.py, Math.max(0.5, 1.5 * p.scale), 0, Math.PI * 2);
+            ctx.fill();
           }
         }
-
-        // Breathing size
-        const breathe = Math.sin(t * 0.002 + blob.phaseX) * 0.1 + 1;
-        const s = blob.size * breathe;
-
-        const grad = ctx.createRadialGradient(blob.x, blob.y, 0, blob.x, blob.y, s);
-        grad.addColorStop(0, blob.color);
-        grad.addColorStop(0.5, blob.color.replace(/[\d.]+\)$/, (parseFloat(blob.color.match(/[\d.]+\)$/)?.[0] || "0") * 0.4).toFixed(3) + ")"));
-        grad.addColorStop(1, "rgba(0,0,0,0)");
-
-        ctx.beginPath();
-        ctx.arc(blob.x, blob.y, s, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
       }
 
-      ctx.globalCompositeOperation = "source-over";
-
-      // ─── 2. CURSOR SPOTLIGHT ───
-      if (m.x > 0 && m.y > 0 && m.x < w && m.y < h) {
-        const spotlight = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, 200);
-        spotlight.addColorStop(0, "rgba(255,255,255,0.03)");
-        spotlight.addColorStop(0.5, "rgba(220,20,60,0.015)");
-        spotlight.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, 200, 0, Math.PI * 2);
-        ctx.fillStyle = spotlight;
-        ctx.fill();
-      }
-
-      // ─── 3. FILM GRAIN OVERLAY ───
-      if (t % 4 === 0) generateGrain(); // Refresh grain every 4 frames
-      ctx.globalAlpha = 0.4;
-      const pattern = ctx.createPattern(grainCanvas, "repeat");
-      if (pattern) {
-        ctx.fillStyle = pattern;
-        ctx.fillRect(0, 0, w, h);
-      }
-      ctx.globalAlpha = 1;
-
-      // ─── 4. SUBTLE VIGNETTE ───
+      // 3. Vignette Overlay (Darkens edges and horizon seamlessly)
       const vignette = ctx.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, h * 0.9);
-      vignette.addColorStop(0, "rgba(0,0,0,0)");
-      vignette.addColorStop(1, "rgba(0,0,0,0.15)");
+      vignette.addColorStop(0, "rgba(5,5,5,0)");
+      vignette.addColorStop(1, "rgba(5,5,5,1)");
       ctx.fillStyle = vignette;
       ctx.fillRect(0, 0, w, h);
+
+      // Also add a top-down linear gradient to hide the horizon cutoff line perfectly
+      const horizonFade = ctx.createLinearGradient(0, 0, 0, h * 0.4);
+      horizonFade.addColorStop(0, "rgba(5,5,5,1)");
+      horizonFade.addColorStop(1, "rgba(5,5,5,0)");
+      ctx.fillStyle = horizonFade;
+      ctx.fillRect(0, 0, w, h * 0.4);
 
       animRef.current = requestAnimationFrame(draw);
     };
