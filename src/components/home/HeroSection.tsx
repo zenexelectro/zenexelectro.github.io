@@ -23,16 +23,12 @@ export function HeroSection() {
           Enterprise-grade installations and hyper-modern smart systems designed for the future of security.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8 px-4">
-          <Button size="lg" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto" asChild>
-            <a href="#services">
-              Explore Solutions <ArrowRight className="ml-2 w-5 h-5" />
-            </a>
-          </Button>
-          <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto bg-transparent border-primary/20 hover:bg-primary/5" asChild>
-            <a href="https://wa.me/917356863575" target="_blank" rel="noopener noreferrer">
-              Contact Sales
-            </a>
-          </Button>
+          <a href="#services" className="inline-flex shrink-0 items-center justify-center rounded-full border border-transparent bg-primary text-primary-foreground hover:bg-primary/80 h-14 px-8 text-lg w-full sm:w-auto font-medium transition-all focus-visible:ring-3 focus-visible:ring-ring/50 outline-none select-none">
+            Explore Solutions <ArrowRight className="ml-2 w-5 h-5" />
+          </a>
+          <a href="https://wa.me/917356863575" target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center justify-center rounded-full border border-primary/20 bg-transparent text-foreground hover:bg-primary/5 h-14 px-8 text-lg w-full sm:w-auto font-medium transition-all focus-visible:ring-3 focus-visible:ring-ring/50 outline-none select-none">
+            Contact Sales
+          </a>
         </div>
       </motion.div>
       
