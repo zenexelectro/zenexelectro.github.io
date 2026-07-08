@@ -59,17 +59,11 @@ export function ParticleBackground() {
       let t = (y + 180) / 360;
       t = Math.max(0, Math.min(1, t));
       
-      const indigo = [99, 102, 241];
-      const emerald = [16, 185, 129];
-      const cherry = [220, 20, 60];
+      // Map elevation to brightness/opacity (lower = dimmer, higher = brighter white)
+      const baseAlpha = 0.15 + (t * 0.6); 
+      const finalAlpha = baseAlpha * alpha;
       
-      let r, g, b;
-      if (t < 0.5) {
-        [r, g, b] = lerpColor(indigo, emerald, t * 2);
-      } else {
-        [r, g, b] = lerpColor(emerald, cherry, (t - 0.5) * 2);
-      }
-      return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+      return `rgba(255, 255, 255, ${finalAlpha.toFixed(3)})`;
     };
 
     // Terrain generator
