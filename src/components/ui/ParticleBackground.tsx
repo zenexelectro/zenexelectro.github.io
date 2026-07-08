@@ -59,8 +59,8 @@ export function ParticleBackground() {
       let t = (y + 180) / 360;
       t = Math.max(0, Math.min(1, t));
       
-      // Map elevation to brightness/opacity (lower = dimmer, higher = brighter white)
-      const baseAlpha = 0.15 + (t * 0.6); 
+      // Map elevation to brightness — low = 35% opacity, high = 100% opacity white
+      const baseAlpha = 0.35 + (t * 0.65);
       const finalAlpha = baseAlpha * alpha;
       
       return `rgba(255, 255, 255, ${finalAlpha.toFixed(3)})`;
@@ -109,8 +109,8 @@ export function ParticleBackground() {
       const cosP = Math.cos(pitch);
       const sinP = Math.sin(pitch);
 
-      // Deep space dark background
-      ctx.fillStyle = "#050505";
+      // Dark background — slightly lighter so white grid reads clearly
+      ctx.fillStyle = "#0a0a12";
       ctx.fillRect(0, 0, w, h);
 
       const points: (Point3D | null)[][] = Array.from({ length: cols }, () => new Array(rows).fill(null));
@@ -146,9 +146,11 @@ export function ParticleBackground() {
           const py = h / 2 - ry * scale;
 
           // Distance fade (fade out in the far horizon)
-          const maxDist = 3500;
+          const maxDist = 3200;
           let alpha = 1 - (rz / maxDist);
-          alpha = Math.max(0, Math.min(1, alpha));
+          // Keep alpha high so white is actually visible
+          alpha = Math.max(0, Math.min(1, alpha)) * 0.85 + 0.15;
+          alpha = Math.min(1, alpha);
           
           // Data nodes (flashing energy packets on the grid)
           // Pseudo-random fast pattern
@@ -170,7 +172,8 @@ export function ParticleBackground() {
           if (!p) continue;
 
           // Draw connecting lines
-          ctx.lineWidth = Math.max(0.3, 1.2 * p.scale);
+          // Thicker, more visible white lines
+          ctx.lineWidth = Math.max(0.6, 1.8 * p.scale);
           
           // Connect to right
           if (i < cols - 1) {
@@ -204,22 +207,26 @@ export function ParticleBackground() {
 
           // Draw intersection node
           if (p.isDataNode) {
-            // Flashing bright data node
-            ctx.fillStyle = "#ffffff";
+            // Large outer white glow
+            const glow = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, Math.max(6, 20 * p.scale));
+            glow.addColorStop(0, "rgba(255,255,255,0.8)");
+            glow.addColorStop(0.4, "rgba(255,255,255,0.3)");
+            glow.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = glow;
             ctx.beginPath();
-            ctx.arc(p.px, p.py, Math.max(1, 4 * p.scale), 0, Math.PI * 2);
+            ctx.arc(p.px, p.py, Math.max(6, 20 * p.scale), 0, Math.PI * 2);
             ctx.fill();
 
-            // Glow
-            ctx.fillStyle = p.color.replace(/[\d.]+\)$/, "0.5)"); // Higher alpha
+            // Solid bright white core
+            ctx.fillStyle = "#ffffff";
             ctx.beginPath();
-            ctx.arc(p.px, p.py, Math.max(2, 12 * p.scale), 0, Math.PI * 2);
+            ctx.arc(p.px, p.py, Math.max(2, 5 * p.scale), 0, Math.PI * 2);
             ctx.fill();
           } else {
-            // Standard subtle node
+            // Standard visible white node
             ctx.fillStyle = p.color;
             ctx.beginPath();
-            ctx.arc(p.px, p.py, Math.max(0.5, 1.5 * p.scale), 0, Math.PI * 2);
+            ctx.arc(p.px, p.py, Math.max(0.8, 2 * p.scale), 0, Math.PI * 2);
             ctx.fill();
           }
         }
