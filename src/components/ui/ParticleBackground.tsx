@@ -44,14 +44,14 @@ export function ParticleBackground() {
       gCtx.putImageData(imgData, 0, 0);
     }
     
-    // Define flowing color blobs (RGB values)
-    // Cherry Red, Emerald, Indigo, Purple, Cyan
+    // Define flowing white/silver light blobs (RGB values)
+    // Pure White, Silver, Off-White variations
     const blobs = [
-      { color: "210, 4, 45", rMult: 1.4, speed: 0.0008, offset: 0, tx: 0, ty: 0, x: 0, y: 0 },
-      { color: "16, 185, 129", rMult: 1.2, speed: 0.0011, offset: Math.PI / 2, tx: 0, ty: 0, x: 0, y: 0 },
-      { color: "79, 70, 229", rMult: 1.5, speed: 0.0009, offset: Math.PI, tx: 0, ty: 0, x: 0, y: 0 },
-      { color: "147, 51, 234", rMult: 1.3, speed: 0.0013, offset: Math.PI * 1.5, tx: 0, ty: 0, x: 0, y: 0 },
-      { color: "6, 182, 212", rMult: 1.1, speed: 0.001, offset: Math.PI / 4, tx: 0, ty: 0, x: 0, y: 0 },
+      { color: "255, 255, 255", rMult: 1.4, speed: 0.0008, offset: 0, tx: 0, ty: 0, x: 0, y: 0 },
+      { color: "230, 235, 240", rMult: 1.2, speed: 0.0011, offset: Math.PI / 2, tx: 0, ty: 0, x: 0, y: 0 },
+      { color: "245, 245, 255", rMult: 1.5, speed: 0.0009, offset: Math.PI, tx: 0, ty: 0, x: 0, y: 0 },
+      { color: "255, 255, 255", rMult: 1.3, speed: 0.0013, offset: Math.PI * 1.5, tx: 0, ty: 0, x: 0, y: 0 },
+      { color: "215, 220, 225", rMult: 1.1, speed: 0.001, offset: Math.PI / 4, tx: 0, ty: 0, x: 0, y: 0 },
     ];
     
     let mouseX = w / 2;
@@ -99,8 +99,9 @@ export function ParticleBackground() {
         b.y += (b.ty - b.y) * 0.02;
         
         const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, radius);
-        grad.addColorStop(0, `rgba(${b.color}, 0.5)`);
-        grad.addColorStop(0.5, `rgba(${b.color}, 0.15)`);
+        // Reduced opacity for white so it doesn't blow out too bright
+        grad.addColorStop(0, `rgba(${b.color}, 0.25)`);
+        grad.addColorStop(0.5, `rgba(${b.color}, 0.08)`);
         grad.addColorStop(1, `rgba(${b.color}, 0)`);
         
         ctx.fillStyle = grad;
@@ -109,11 +110,11 @@ export function ParticleBackground() {
         ctx.fill();
       });
       
-      // Cursor Spotlight (Soft crimson/white glow)
+      // Cursor Spotlight (Soft pure white glow)
       const spotlightRadius = maxDim * 0.4;
       const spotlight = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, spotlightRadius);
-      spotlight.addColorStop(0, "rgba(255, 255, 255, 0.06)");
-      spotlight.addColorStop(0.2, "rgba(220, 20, 60, 0.03)");
+      spotlight.addColorStop(0, "rgba(255, 255, 255, 0.08)");
+      spotlight.addColorStop(0.3, "rgba(255, 255, 255, 0.03)");
       spotlight.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = spotlight;
       ctx.fillRect(0, 0, w, h);
