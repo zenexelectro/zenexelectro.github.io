@@ -8,7 +8,7 @@ export function Header() {
         <div className="flex w-full justify-between items-center">
           <Link className="flex items-center space-x-2" href="/">
             <span className="font-bold inline-block text-base sm:text-xl tracking-tight">
-              ZENEX<span className="text-muted-foreground font-light text-[10px] sm:text-base">SYSTEMS</span>
+              ZEN<span className="bg-gradient-to-b from-[#ff0844] to-[#9e0d21] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(255,8,68,0.5)]">EX</span><span className="text-muted-foreground font-light text-[10px] sm:text-base ml-1">SYSTEMS</span>
             </span>
           </Link>
           <div className="flex items-center gap-2 md:gap-6">

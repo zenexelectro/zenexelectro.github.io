@@ -3,10 +3,12 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ParticleBackground } from "@/components/ui/ParticleBackground";
 
 export function HeroSection() {
   return (
-    <section className="relative w-full pt-32 pb-20 md:pt-48 md:pb-32 px-8 flex flex-col items-center text-center">
+    <section className="relative w-full pt-32 pb-20 md:pt-48 md:pb-32 px-8 flex flex-col items-center text-center overflow-hidden">
+      <ParticleBackground />
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
