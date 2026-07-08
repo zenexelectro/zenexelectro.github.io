@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Particles, { ParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import { type Engine } from "@tsparticles/engine";
+import { type Engine, type ISourceOptions } from "@tsparticles/engine";
 
 // MUST be stable across lifecycle to prevent ParticlesProvider from throwing
 const initParticles = async (engine: Engine) => {
@@ -11,7 +11,7 @@ const initParticles = async (engine: Engine) => {
 };
 
 export function ParticleBackground() {
-  const options = useMemo(
+  const options: ISourceOptions = useMemo(
     () => ({
       background: {
         color: {
