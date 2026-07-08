@@ -23,11 +23,15 @@ export function HeroSection() {
           Enterprise-grade installations and hyper-modern smart systems designed for the future of security.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8 px-4">
-          <Button size="lg" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto">
-            Explore Solutions <ArrowRight className="ml-2 w-5 h-5" />
+          <Button size="lg" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto" asChild>
+            <a href="#services">
+              Explore Solutions <ArrowRight className="ml-2 w-5 h-5" />
+            </a>
           </Button>
-          <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto bg-transparent border-primary/20 hover:bg-primary/5">
-            Contact Sales
+          <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg w-full sm:w-auto bg-transparent border-primary/20 hover:bg-primary/5" asChild>
+            <a href="mailto:zenexelectro@gmail.com">
+              Contact Sales
+            </a>
           </Button>
         </div>
       </motion.div>
