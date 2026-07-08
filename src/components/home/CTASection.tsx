@@ -23,12 +23,12 @@ export function CTASection() {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 relative z-10">
-          <Button size="lg" className="rounded-full px-8 h-14 text-lg">
+          <a href="https://wa.me/917356863575?text=Hi%2C%20I%20would%20like%20to%20get%20a%20free%20quote" target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center justify-center rounded-full border border-transparent bg-primary text-primary-foreground hover:bg-primary/80 h-14 px-8 text-lg w-full sm:w-auto font-medium transition-all focus-visible:ring-3 focus-visible:ring-ring/50 outline-none select-none">
             Get a Free Quote
-          </Button>
-          <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg bg-background/50 backdrop-blur">
+          </a>
+          <a href="tel:+917356863575" className="inline-flex shrink-0 items-center justify-center rounded-full border border-border bg-background/50 backdrop-blur text-foreground hover:bg-muted h-14 px-8 text-lg w-full sm:w-auto font-medium transition-all focus-visible:ring-3 focus-visible:ring-ring/50 outline-none select-none">
             Talk to an Expert
-          </Button>
+          </a>
         </div>
       </motion.div>
     </section>
